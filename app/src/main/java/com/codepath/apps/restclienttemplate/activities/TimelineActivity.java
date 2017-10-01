@@ -3,15 +3,18 @@ package com.codepath.apps.restclienttemplate.activities;
 import java.util.ArrayList;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.adapter.TweetAdapter;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.adapter.TweetAdapter;
+import com.codepath.apps.restclienttemplate.helper.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -27,6 +30,10 @@ public class TimelineActivity extends AppCompatActivity {
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
+    long max_id;
+    static final int PAGE_SIZE = 5;
+
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +44,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         //find the RecyclerView
         rvTweets = (RecyclerView) findViewById(R.id.rvTweet);
-
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         //init the arraylist(data source)
         tweets = new ArrayList<>();
 
@@ -45,15 +52,45 @@ public class TimelineActivity extends AppCompatActivity {
         tweetAdapter = new TweetAdapter(tweets);
 
         //RecyclerView setup (layout manager, use adapter)
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        rvTweets.setLayoutManager(linearLayoutManager);
         //set adapter
         rvTweets.setAdapter(tweetAdapter);
 
-        populateTimeline();
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Toast.makeText(TimelineActivity.this, "Loading more", Toast.LENGTH_SHORT).show();
+                populatePostDelayTimeline(PAGE_SIZE, max_id, 500);
+
+            }
+        };
+
+        rvTweets.addOnScrollListener(scrollListener);
+
+        max_id = -1;
+        populatePostDelayTimeline(PAGE_SIZE, max_id, 500);
+
     }
 
-    private void populateTimeline() {
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+    private void getNewMaxId(long uid) {
+        if (max_id < 0 || uid < max_id) {
+            max_id = uid - 1;
+        }
+    }
+
+    void populatePostDelayTimeline(final int count, final long maxId, long delayMillis) {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                populateTimeline(count, maxId);
+            }
+        }, delayMillis);
+    }
+
+    private void populateTimeline(int count, long max_id) {
+        client.getHomeTimeline(count, max_id, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("TwitterClient", response.toString());
@@ -73,6 +110,9 @@ public class TimelineActivity extends AppCompatActivity {
                     try {
                         Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
                         tweets.add(tweet);
+
+                        getNewMaxId(tweet.uid);
+
                         tweetAdapter.notifyItemInserted(tweets.size() - 1);
                         Log.d("DeBUG", tweets.toString());
                     } catch (JSONException e) {
@@ -102,4 +142,5 @@ public class TimelineActivity extends AppCompatActivity {
         });
 
     }
+
 }
