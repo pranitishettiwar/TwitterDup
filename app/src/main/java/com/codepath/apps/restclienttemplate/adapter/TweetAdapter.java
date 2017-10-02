@@ -50,7 +50,10 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
         holder.tvTimeAgo.setText(tweet.timeAgo);
 
-        Glide.with(context).load(tweet.user.profileImageUrl).into(holder.ivProfileImage);
+        String str = new String(tweet.user.profileImageUrl);
+        str = str.replace("_normal", "");
+
+        Glide.with(context).load(str).into(holder.ivProfileImage);
 
     }
 

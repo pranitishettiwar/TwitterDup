@@ -83,8 +83,11 @@ public class ComposeFragment extends DialogFragment {
             log.d("JSON parsing exception when creating user", e.toString());
         }
 
+        String str = new String(user.profileImageUrl);
+        str = str.replace("_normal", "");
+
         tvProfileName.setText(user.screenName);
-        Glide.with(getContext()).load(user.profileImageUrl).apply(bitmapTransform(new RoundedCornersTransformation(10, 0,
+        Glide.with(getContext()).load(str).apply(bitmapTransform(new RoundedCornersTransformation(10, 0,
             RoundedCornersTransformation.CornerType.ALL))).into(ivProfileImage);
 
         etCompose.setOnKeyListener(new View.OnKeyListener() {
