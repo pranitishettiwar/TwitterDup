@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,6 @@ public class ComposeFragment extends DialogFragment {
     private ImageView ivProfileImage;
     private Button btnTweet;
     private User user;
-    private String profileImageUrl, screenName;
     private TwitterClient client;
 
     public ComposeFragment() {
@@ -54,8 +54,6 @@ public class ComposeFragment extends DialogFragment {
         ComposeFragment frag = new ComposeFragment();
         Bundle args = new Bundle();
         args.putString("jsonData", user.userData.toString());
-        //        args.putString("profileImageUrl", profileImageUrl);
-        //        args.putString("screenName", screenName);
         frag.setArguments(args);
         return frag;
     }
@@ -89,22 +87,33 @@ public class ComposeFragment extends DialogFragment {
         Glide.with(getContext()).load(user.profileImageUrl).apply(bitmapTransform(new RoundedCornersTransformation(10, 0,
             RoundedCornersTransformation.CornerType.ALL))).into(ivProfileImage);
 
+        etCompose.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                int currentLength = etCompose.getText().length();
+                int maxLength = 140;
+                int left = maxLength - currentLength;
+                tvCounter.setText(left + "");
+                return false;
+            }
+        });
+
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String updateStatus = etCompose.getText().toString();
-                Log.d("debug", "Post status: " + updateStatus);
+                final String composeTweet = etCompose.getText().toString();
+                Log.d("debug", "Post status: " + composeTweet);
                 client.postTweet(new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         Tweet tweet = new Tweet();
                         tweet.user = user;
-                        tweet.body = updateStatus;
+                        tweet.body = composeTweet;
                         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
                         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
                         Date dt = new Date();
                         tweet.createdAt = sf.format(dt);
-                        Toast.makeText(getContext(), "Tweet posted successfully!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Tweet posted !", Toast.LENGTH_LONG).show();
                         OnSuccessTweetUpdate listener = (OnSuccessTweetUpdate) getActivity();
                         listener.onFinishTweetCompose(tweet);
                         dismiss();
@@ -114,11 +123,12 @@ public class ComposeFragment extends DialogFragment {
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                         Log.d("debug", "Tweet post failed " + errorResponse.toString());
                     }
-                }, updateStatus);
+                }, composeTweet);
             }
 
         });
     }
+
 
     public interface OnSuccessTweetUpdate {
         void onFinishTweetCompose(Tweet tweet);
