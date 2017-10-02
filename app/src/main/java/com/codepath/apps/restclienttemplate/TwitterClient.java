@@ -21,37 +21,48 @@ import com.loopj.android.http.RequestParams;
  * 
  */
 public class TwitterClient extends OAuthBaseClient {
-	public static final BaseApi REST_API_INSTANCE = TwitterApi.instance();
-	public static final String REST_URL = "https://api.twitter.com/1.1/";
-	public static final String REST_CONSUMER_KEY = "A8B4c6FyatjAyJBmajgcLn1Kr";
-	public static final String REST_CONSUMER_SECRET = "5nwiVfUbRXUAjMfYWw5vUAZwmAYukC1ZCWc6IiTmvr21dyxDgI";
+    public static final BaseApi REST_API_INSTANCE = TwitterApi.instance();
+    public static final String REST_URL = "https://api.twitter.com/1.1/";
+    public static final String REST_CONSUMER_KEY = "A8B4c6FyatjAyJBmajgcLn1Kr";
+    public static final String REST_CONSUMER_SECRET = "5nwiVfUbRXUAjMfYWw5vUAZwmAYukC1ZCWc6IiTmvr21dyxDgI";
 
-	// Landing page to indicate the OAuth flow worked in case Chrome for Android 25+ blocks navigation back to the app.
-	public static final String FALLBACK_URL = "https://codepath.github.io/android-rest-client-template/success.html";
+    // Landing page to indicate the OAuth flow worked in case Chrome for Android 25+ blocks navigation back to the app.
+    public static final String FALLBACK_URL = "https://codepath.github.io/android-rest-client-template/success.html";
 
-	// See https://developer.chrome.com/multidevice/android/intents
-	public static final String REST_CALLBACK_URL_TEMPLATE = "intent://%s#Intent;action=android.intent.action.VIEW;scheme=%s;package=%s;S.browser_fallback_url=%s;end";
+    // See https://developer.chrome.com/multidevice/android/intents
+    public static final String REST_CALLBACK_URL_TEMPLATE = "intent://%s#Intent;action=android.intent.action.VIEW;scheme=%s;" +
+        "package=%s;S.browser_fallback_url=%s;end";
 
-	public TwitterClient(Context context) {
-		super(context, REST_API_INSTANCE,
-				REST_URL,
-				REST_CONSUMER_KEY,
-				REST_CONSUMER_SECRET,
-				String.format(REST_CALLBACK_URL_TEMPLATE, context.getString(R.string.intent_host),
-						context.getString(R.string.intent_scheme), context.getPackageName(), FALLBACK_URL));
-	}
-	// CHANGE THIS
-	// DEFINE METHODS for different API endpoints here
-	public void getHomeTimeline(int count, long max_id, AsyncHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("statuses/home_timeline.json");
-		// Can specify query string params directly or through RequestParams.
-		RequestParams params = new RequestParams();
-		params.put("count", count);
+    public TwitterClient(Context context) {
+        super(context, REST_API_INSTANCE, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, String.format
+            (REST_CALLBACK_URL_TEMPLATE, context.getString(R.string.intent_host), context.getString(R.string.intent_scheme),
+                context.getPackageName(), FALLBACK_URL));
+    }
 
-		if (max_id >= 0) {
-			params.put("max_id", max_id);
-		}
-		client.get(apiUrl, params, handler);
-	}
+    // CHANGE THIS
+    // DEFINE METHODS for different API endpoints here
+    public void getHomeTimeline(int count, long max_id, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/home_timeline.json");
+        // Can specify query string params directly or through RequestParams.
+        RequestParams params = new RequestParams();
+        params.put("count", count);
+
+        if (max_id >= 0) {
+            params.put("max_id", max_id);
+        }
+        client.get(apiUrl, params, handler);
+    }
+
+    public void postTweet(AsyncHttpResponseHandler handler, String message) {
+        String apiUrl = getApiUrl("statuses/update.json");
+        RequestParams params = new RequestParams();
+        params.put("status", message);
+        client.post(apiUrl, params, handler);
+    }
+
+    public void getUserInfo(AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("account/verify_credentials.json");
+        client.get(apiUrl, handler);
+    }
 
 }
