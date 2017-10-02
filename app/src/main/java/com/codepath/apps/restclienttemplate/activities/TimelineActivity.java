@@ -16,10 +16,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.codepath.apps.restclienttemplate.ComposeFragment;
+import com.codepath.apps.restclienttemplate.fragments.ComposeFragment;
 import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.TwitterApp;
-import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.helper.TwitterApp;
+import com.codepath.apps.restclienttemplate.helper.TwitterClient;
 import com.codepath.apps.restclienttemplate.adapter.TweetAdapter;
 import com.codepath.apps.restclienttemplate.helper.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.restclienttemplate.models.Tweet;
