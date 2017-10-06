@@ -17,7 +17,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by praniti on 10/5/17.
  */
 
-public class HomeTimelineFragment extends TweetsListFragment {
+public class MentionsTimelineFragment extends TweetsListFragment {
     TwitterClient client;
 
     @Override
@@ -29,7 +29,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
     }
 
     private void populateTimeline() {
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+        client.getMentionsTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("TwitterClient", response.toString());
