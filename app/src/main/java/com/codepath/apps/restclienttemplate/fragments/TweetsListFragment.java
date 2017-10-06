@@ -39,7 +39,7 @@ public class TweetsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragments_tweet_list, container);
+        View v = inflater.inflate(R.layout.fragments_tweet_list, container, false);
 
         //find the RecyclerView
         rvTweets = (RecyclerView) v.findViewById(R.id.rvTweet);
@@ -86,11 +86,11 @@ public class TweetsListFragment extends Fragment {
 //    }
 
 
-    private void getNewMaxId(long uid) {
-        if (max_id < 0 || uid < max_id) {
-            max_id = uid - 1;
-        }
-    }
+//    private void getNewMaxId(long uid) {
+//        if (max_id < 0 || uid < max_id) {
+//            max_id = uid - 1;
+//        }
+//    }
 
     public void addItems(JSONArray response) {
         for (int i = 0; i < response.length(); i++) {
@@ -101,7 +101,7 @@ public class TweetsListFragment extends Fragment {
                 Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
                 tweets.add(tweet);
 
-                getNewMaxId(tweet.uid);
+                //getNewMaxId(tweet.uid);
 
                 tweetAdapter.notifyItemInserted(tweets.size() - 1);
                 Log.d("DeBUG", tweets.toString());
