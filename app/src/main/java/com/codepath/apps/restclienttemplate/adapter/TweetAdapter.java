@@ -58,9 +58,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
         holder.tvTimeAgo.setText(tweet.timeAgo);
 
-        //        String str = new String(tweet.user.profileImageUrl);
-        //        str = str.replace("_normal", "");
-
         Glide.with(context).load(tweet.user.getProfileImageUrl()).into(holder.ivProfileImage);
 
     }
@@ -77,7 +74,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public TextView tvTimeAgo;
         public TextView tvName;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
 
             ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
@@ -86,8 +83,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvTimeAgo = (TextView) itemView.findViewById(R.id.tvTimeAgo);
             tvName = (TextView) itemView.findViewById(R.id.tvName);
 
-            //handle row click event
-            itemView.setOnClickListener(new View.OnClickListener() {
+            ivProfileImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mListener != null) {
@@ -96,9 +92,23 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                         //fire the listener callback
                         mListener.onItemSelected(view, position);
                     }
-
                 }
             });
+
+
+            //handle row click event
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (mListener != null) {
+//                        //get position of row element
+//                        int position = getAdapterPosition();
+//                        //fire the listener callback
+//                        mListener.onItemSelected(view, position);
+//                    }
+//
+//                }
+//            });
 
         }
 

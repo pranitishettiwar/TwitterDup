@@ -7,13 +7,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.adapter.TweetsPagerAdapter;
 import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
-import com.codepath.apps.restclienttemplate.fragments.TweetsPagerAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
+
+import org.parceler.Parcels;
 
 public class TimelineActivity extends AppCompatActivity implements TweetsListFragment.TweetSelectedListener {
 
@@ -112,9 +113,13 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
     //            }
     //        });
     //    }
-    @Override
-    public void onTweetSelected(Tweet tweet) {
-        Toast.makeText(this, tweet.body, Toast.LENGTH_SHORT).show();
-    }
+        @Override
+        public void onTweetSelected(Tweet tweet) {
+            //Toast.makeText(this, tweet.user.screenName, Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(TimelineActivity.this, ProfileActivity.class);
+            //i.putExtra("screenName", tweet.user.screenName);
+            i.putExtra("user", Parcels.wrap(tweet.user));
+            startActivity(i);
+        }
 
 }

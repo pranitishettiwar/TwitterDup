@@ -56,7 +56,7 @@ public class ComposeFragment extends DialogFragment {
     public static ComposeFragment newInstance(User user) {
         ComposeFragment frag = new ComposeFragment();
         Bundle args = new Bundle();
-        args.putString("jsonData", user.userData.toString());
+        //args.putString("jsonData", user.userData.toString());
         frag.setArguments(args);
         return frag;
     }

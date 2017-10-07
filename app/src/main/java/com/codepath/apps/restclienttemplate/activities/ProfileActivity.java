@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -8,57 +9,70 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
 import com.codepath.apps.restclienttemplate.fragments.UserTimelineFragment;
 import com.codepath.apps.restclienttemplate.helper.TwitterApp;
 import com.codepath.apps.restclienttemplate.helper.TwitterClient;
+import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements TweetsListFragment.TweetSelectedListener {
+
 
     TwitterClient client;
+    User mUser = null;
+    UserTimelineFragment userTimelineFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        String screenName = getIntent().getStringExtra("screen_name");
-        //Create user fragment
-        UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
+        mUser = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        //String screenName = getIntent().getStringExtra("screenName");
 
-        //display user timeline fragment inside container(dynamically)
+        if(mUser != null)
+        {
+            populateUserHeadline(mUser);
+        }
+        else {
+            client = TwitterApp.getRestClient();
+
+            client.getUserInfo(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                    try {
+                        mUser = User.fromJSON(response);
+                        //set the title of actionBar
+                        getSupportActionBar().setTitle(mUser.screenName);
+                        //populate user headline
+                        populateUserHeadline(mUser);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            });
+        }
+    }
+
+    public void populateUserHeadline(User user) {
+
+        // Display user timeline fragment inside container(dynamically)
+        userTimelineFragment = UserTimelineFragment.newInstance(mUser.getScreenName());
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.flContainer, userTimelineFragment);
         ft.commit();
 
-        client = TwitterApp.getRestClient();
-
-        client.getUserInfo(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                User user = null;
-                try {
-                    user = User.fromJSON(response);
-                    //set the title of actionBar
-                    getSupportActionBar().setTitle(user.screenName);
-                    //populate user headline
-                    populateUserHeadline(user);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        });
-    }
-
-    public void populateUserHeadline(User user) {
         TextView tvName = (TextView) findViewById(R.id.tvName);
         TextView tvTagline = (TextView) findViewById(R.id.tvTagline);
         TextView tvFollowers = (TextView) findViewById(R.id.tvFollowers);
@@ -74,4 +88,14 @@ public class ProfileActivity extends AppCompatActivity {
         Glide.with(this).load(user.getProfileImageUrl()).into(ivProfileImage);
 
     }
+
+    @Override
+    public void onTweetSelected(Tweet tweet) {
+        //Toast.makeText(this, tweet.user.screenName, Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(ProfileActivity.this, ProfileActivity.class);
+        //i.putExtra("screenName", tweet.user.screenName);
+        i.putExtra("user", Parcels.wrap(tweet.user));
+        startActivity(i);
+    }
+
 }

@@ -1,9 +1,12 @@
-package com.codepath.apps.restclienttemplate.fragments;
+package com.codepath.apps.restclienttemplate.adapter;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.codepath.apps.restclienttemplate.fragments.HomeTimelineFragment;
+import com.codepath.apps.restclienttemplate.fragments.MentionsTimelineFragment;
 
 /**
  * Created by praniti on 10/5/17.
