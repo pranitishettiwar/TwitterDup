@@ -1,9 +1,12 @@
 package com.codepath.apps.restclienttemplate.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.fragments.TweetsPagerAdapter;
@@ -29,9 +32,21 @@ public class TimelineActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(vpPager);
 
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_timeline, menu);
+        return true;
+    }
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+    public void onProfileView(MenuItem item){
+        //launch Profile view
+        Intent i = new Intent(this, ProfileActivity.class);
+        startActivity(i);
+    }
+
+    //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -50,7 +65,7 @@ public class TimelineActivity extends AppCompatActivity {
         //        }
 
 
-    }
+
 
 
 //    void populatePostDelayTimeline(final int count, final long maxId, long delayMillis) {

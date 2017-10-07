@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.adapter.TweetAdapter;
@@ -24,7 +25,7 @@ import org.json.JSONException;
  * Created by praniti on 10/4/17.
  */
 
-public class TweetsListFragment extends Fragment {
+public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAdapterListener {
 
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
@@ -48,7 +49,7 @@ public class TweetsListFragment extends Fragment {
         tweets = new ArrayList<>();
 
         //construct the adapter from this datasource
-        tweetAdapter = new TweetAdapter(tweets);
+        tweetAdapter = new TweetAdapter(tweets, this);
 
         //RecyclerView setup (layout manager, use adapter)
         rvTweets.setLayoutManager(linearLayoutManager);
@@ -56,18 +57,18 @@ public class TweetsListFragment extends Fragment {
         rvTweets.setAdapter(tweetAdapter);
 
         // Retain an instance so that you can call `resetState()` for fresh searches
-//        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-//                if (isNetworkAvailable()) {
-//                    Toast.makeText(getContext(), "Loading more", Toast.LENGTH_SHORT).show();
-//                    populatePostDelayTimeline(PAGE_SIZE, max_id, 500);
-//                } else {
-//                    Toast.makeText(getContext(), "Please connect to internet", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//        };
+        //        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+        //            @Override
+        //            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+        //                if (isNetworkAvailable()) {
+        //                    Toast.makeText(getContext(), "Loading more", Toast.LENGTH_SHORT).show();
+        //                    populatePostDelayTimeline(PAGE_SIZE, max_id, 500);
+        //                } else {
+        //                    Toast.makeText(getContext(), "Please connect to internet", Toast.LENGTH_SHORT).show();
+        //                }
+        //            }
+        //
+        //        };
 
         //rvTweets.addOnScrollListener(scrollListener);
 
@@ -79,18 +80,17 @@ public class TweetsListFragment extends Fragment {
         return v;
     }
 
-//    private Boolean isNetworkAvailable() {
-//        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-//        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-//    }
+    //    private Boolean isNetworkAvailable() {
+    //        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    //        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+    //        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    //    }
 
-
-//    private void getNewMaxId(long uid) {
-//        if (max_id < 0 || uid < max_id) {
-//            max_id = uid - 1;
-//        }
-//    }
+    //    private void getNewMaxId(long uid) {
+    //        if (max_id < 0 || uid < max_id) {
+    //            max_id = uid - 1;
+    //        }
+    //    }
 
     public void addItems(JSONArray response) {
         for (int i = 0; i < response.length(); i++) {
@@ -109,5 +109,11 @@ public class TweetsListFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onItemSelected(View view, int position) {
+        Tweet tweet = tweets.get(position);
+        Toast.makeText(getContext(), tweet.body, Toast.LENGTH_SHORT).show();
     }
 }

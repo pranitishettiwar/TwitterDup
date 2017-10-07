@@ -22,9 +22,16 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
     private List<Tweet> mTweets;
     Context context;
+    private TweetAdapterListener mListener;
 
-    public TweetAdapter(List<Tweet> tweets) {
+    //Define an interface required by ViewHolder
+    public interface TweetAdapterListener {
+        public void onItemSelected(View view, int position);
+    }
+
+    public TweetAdapter(List<Tweet> tweets, TweetAdapterListener listener) {
         mTweets = tweets;
+        mListener = listener;
     }
 
     @Override
@@ -51,10 +58,10 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
         holder.tvTimeAgo.setText(tweet.timeAgo);
 
-        String str = new String(tweet.user.profileImageUrl);
-        str = str.replace("_normal", "");
+        //        String str = new String(tweet.user.profileImageUrl);
+        //        str = str.replace("_normal", "");
 
-        Glide.with(context).load(str).into(holder.ivProfileImage);
+        Glide.with(context).load(tweet.user.getProfileImageUrl()).into(holder.ivProfileImage);
 
     }
 
@@ -63,7 +70,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         return mTweets.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView ivProfileImage;
         public TextView tvUsername;
         public TextView tvBody;
@@ -78,6 +85,20 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvTimeAgo = (TextView) itemView.findViewById(R.id.tvTimeAgo);
             tvName = (TextView) itemView.findViewById(R.id.tvName);
+
+            //handle row click event
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mListener != null) {
+                        //get position of row element
+                        int position = getAdapterPosition();
+                        //fire the listener callback
+                        mListener.onItemSelected(view, position);
+                    }
+
+                }
+            });
 
         }
 
