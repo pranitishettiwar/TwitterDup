@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.adapter.TweetAdapter;
@@ -26,6 +25,11 @@ import org.json.JSONException;
  */
 
 public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAdapterListener {
+
+    public interface TweetSelectedListener {
+        //handle tweet selection
+        public void onTweetSelected(Tweet tweet);
+    }
 
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
@@ -114,6 +118,7 @@ public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAd
     @Override
     public void onItemSelected(View view, int position) {
         Tweet tweet = tweets.get(position);
-        Toast.makeText(getContext(), tweet.body, Toast.LENGTH_SHORT).show();
+        ((TweetSelectedListener) getActivity()).onTweetSelected(tweet);
+
     }
 }

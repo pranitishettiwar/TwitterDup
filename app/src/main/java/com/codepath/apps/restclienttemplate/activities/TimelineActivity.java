@@ -7,12 +7,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetsPagerAdapter;
+import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements TweetsListFragment.TweetSelectedListener {
 
     private User user;
     long max_id;
@@ -40,79 +43,78 @@ public class TimelineActivity extends AppCompatActivity {
         return true;
     }
 
-    public void onProfileView(MenuItem item){
+    public void onProfileView(MenuItem item) {
         //launch Profile view
         Intent i = new Intent(this, ProfileActivity.class);
         startActivity(i);
     }
 
     //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentManager fm = getSupportFragmentManager();
-//                ComposeFragment composeDialogFragment = ComposeFragment.newInstance(user);
-//                composeDialogFragment.show(fm, "fragment_compose");
-//
-//            }
-//        });
+    //        fab.setOnClickListener(new View.OnClickListener() {
+    //            @Override
+    //            public void onClick(View view) {
+    //                FragmentManager fm = getSupportFragmentManager();
+    //                ComposeFragment composeDialogFragment = ComposeFragment.newInstance(user);
+    //                composeDialogFragment.show(fm, "fragment_compose");
+    //
+    //            }
+    //        });
 
-        //        @Override
-        //        public void onFinishTweetCompose (Tweet tweet){
-        //            tweets.add(0, tweet);
-        //            tweetAdapter.notifyItemInserted(0);
-        //            rvTweets.scrollToPosition(0);
-        //        }
+    //        @Override
+    //        public void onFinishTweetCompose (Tweet tweet){
+    //            tweets.add(0, tweet);
+    //            tweetAdapter.notifyItemInserted(0);
+    //            rvTweets.scrollToPosition(0);
+    //        }
 
+    //    void populatePostDelayTimeline(final int count, final long maxId, long delayMillis) {
+    //        final Handler handler = new Handler();
+    //        handler.postDelayed(new Runnable() {
+    //            @Override
+    //            public void run() {
+    //                populateTimeline(count, maxId);
+    //            }
+    //        }, delayMillis);
+    //    }
 
-
-
-
-//    void populatePostDelayTimeline(final int count, final long maxId, long delayMillis) {
-//        final Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                populateTimeline(count, maxId);
-//            }
-//        }, delayMillis);
-//    }
-
-//    private void userInfo() {
-//        client.getUserInfo(new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                try {
-//                    user = User.fromJSON(response);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                Log.d("TwitterClient", response.toString());
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                Log.d("TwitterClient", responseString);
-//                throwable.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                Log.d("TwitterClient", errorResponse.toString());
-//                throwable.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-//                Log.d("TwitterClient", errorResponse.toString());
-//                throwable.printStackTrace();
-//            }
-//        });
-//    }
-
+    //    private void userInfo() {
+    //        client.getUserInfo(new JsonHttpResponseHandler() {
+    //            @Override
+    //            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+    //                try {
+    //                    user = User.fromJSON(response);
+    //                } catch (JSONException e) {
+    //                    e.printStackTrace();
+    //                }
+    //            }
+    //
+    //            @Override
+    //            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+    //                Log.d("TwitterClient", response.toString());
+    //            }
+    //
+    //            @Override
+    //            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+    //                Log.d("TwitterClient", responseString);
+    //                throwable.printStackTrace();
+    //            }
+    //
+    //            @Override
+    //            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+    //                Log.d("TwitterClient", errorResponse.toString());
+    //                throwable.printStackTrace();
+    //            }
+    //
+    //            @Override
+    //            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+    //                Log.d("TwitterClient", errorResponse.toString());
+    //                throwable.printStackTrace();
+    //            }
+    //        });
+    //    }
+    @Override
+    public void onTweetSelected(Tweet tweet) {
+        Toast.makeText(this, tweet.body, Toast.LENGTH_SHORT).show();
+    }
 
 }
