@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate.fragments;
 
 import java.util.ArrayList;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.adapter.TweetAdapter;
+import com.codepath.apps.restclienttemplate.databinding.FragmentsTweetListBinding;
 import com.codepath.apps.restclienttemplate.helper.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
@@ -28,7 +30,7 @@ public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAd
 
     public interface TweetSelectedListener {
         //handle tweet selection
-        public void onTweetSelected(Tweet tweet);
+        void onTweetSelected(Tweet tweet);
     }
 
     TweetAdapter tweetAdapter;
@@ -38,16 +40,16 @@ public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAd
     static final int PAGE_SIZE = 5;
 
     private EndlessRecyclerViewScrollListener scrollListener;
+    private FragmentsTweetListBinding binding;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragments_tweet_list, container, false);
-
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragments_tweet_list, container, false);
         //find the RecyclerView
-        rvTweets = (RecyclerView) v.findViewById(R.id.rvTweet);
+        rvTweets = binding.rvTweet;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         //init the arraylist(data source)
         tweets = new ArrayList<>();
@@ -81,7 +83,7 @@ public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAd
         //userInfo();
         //populatePostDelayTimeline(PAGE_SIZE, max_id, 500);
 
-        return v;
+        return binding.getRoot();
     }
 
     //    private Boolean isNetworkAvailable() {

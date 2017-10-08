@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.databinding.FragmentComposeBinding;
 import com.codepath.apps.restclienttemplate.helper.TwitterApp;
 import com.codepath.apps.restclienttemplate.helper.TwitterClient;
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -47,23 +49,16 @@ public class ComposeFragment extends DialogFragment {
     private Button btnTweet;
     private User mUser;
     private TwitterClient client;
+    private FragmentComposeBinding binding;
 
     public ComposeFragment() {
 
     }
 
-    //    public static ComposeFragment newInstance(User user) {
-    //        ComposeFragment frag = new ComposeFragment();
-    //        Bundle args = new Bundle();
-    //
-    //        //args.putString("jsonData", user.userData.toString());
-    //        frag.setArguments(args);
-    //        return frag;
-    //    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_compose, container);
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_compose, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -72,11 +67,11 @@ public class ComposeFragment extends DialogFragment {
 
         client = TwitterApp.getRestClient();
         // Get field from view
-        etCompose = (EditText) view.findViewById(R.id.etCompose);
-        tvCounter = (TextView) view.findViewById(R.id.tvCounter);
-        tvProfileName = (TextView) view.findViewById(R.id.tvProfileName);
-        ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage1);
-        btnTweet = (Button) view.findViewById(R.id.buttonTweet);
+        etCompose = binding.etCompose;
+        tvCounter = binding.tvCounter;
+        tvProfileName = binding.tvProfileName;
+        ivProfileImage = binding.ivProfileImage1;
+        btnTweet = binding.buttonTweet;
 
         mUser = new User().currentUser;
 

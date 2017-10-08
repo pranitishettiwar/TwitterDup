@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.adapter.TweetsPagerAdapter;
+import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.fragments.ComposeFragment;
 import com.codepath.apps.restclienttemplate.fragments.HomeTimelineFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
@@ -26,21 +28,22 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
     long max_id;
     private TweetsPagerAdapter mTweetsPagerAdapter;
     private ViewPager vpPager;
+    private ActivityTimelineBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timeline);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_timeline);
 
         mTweetsPagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager(), this);
         //set the view pager
-        vpPager = (ViewPager) findViewById(R.id.viewpager);
+        vpPager = binding.viewpager;
 
         //set the adapter for view pager
         vpPager.setAdapter(mTweetsPagerAdapter);
 
         //set the TabLayout to use view pager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        TabLayout tabLayout = binding.slidingTabs;
         tabLayout.setupWithViewPager(vpPager);
 
     }

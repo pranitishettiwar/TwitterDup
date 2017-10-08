@@ -95,20 +95,19 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                 }
             });
 
-
             //handle row click event
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (mListener != null) {
-//                        //get position of row element
-//                        int position = getAdapterPosition();
-//                        //fire the listener callback
-//                        mListener.onItemSelected(view, position);
-//                    }
-//
-//                }
-//            });
+            //            itemView.setOnClickListener(new View.OnClickListener() {
+            //                @Override
+            //                public void onClick(View view) {
+            //                    if (mListener != null) {
+            //                        //get position of row element
+            //                        int position = getAdapterPosition();
+            //                        //fire the listener callback
+            //                        mListener.onItemSelected(view, position);
+            //                    }
+            //
+            //                }
+            //            });
 
         }
 

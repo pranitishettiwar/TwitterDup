@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.databinding.ActivityProfileBinding;
 import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
 import com.codepath.apps.restclienttemplate.fragments.UserTimelineFragment;
 import com.codepath.apps.restclienttemplate.helper.TwitterApp;
@@ -25,7 +27,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class ProfileActivity extends AppCompatActivity implements TweetsListFragment.TweetSelectedListener {
 
-
+    private ActivityProfileBinding binding;
     TwitterClient client;
     User mUser = null;
     UserTimelineFragment userTimelineFragment;
@@ -33,16 +35,14 @@ public class ProfileActivity extends AppCompatActivity implements TweetsListFrag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_profile);
 
         mUser = Parcels.unwrap(getIntent().getParcelableExtra("user"));
         //String screenName = getIntent().getStringExtra("screenName");
 
-        if(mUser != null)
-        {
+        if (mUser != null) {
             populateUserHeadline(mUser);
-        }
-        else {
+        } else {
             client = TwitterApp.getRestClient();
 
             client.getUserInfo(new JsonHttpResponseHandler() {
@@ -74,12 +74,12 @@ public class ProfileActivity extends AppCompatActivity implements TweetsListFrag
         ft.replace(R.id.flContainer, userTimelineFragment);
         ft.commit();
 
-        TextView tvName = (TextView) findViewById(R.id.tvName);
-        TextView tvTagline = (TextView) findViewById(R.id.tvTagline);
-        TextView tvFollowers = (TextView) findViewById(R.id.tvFollowers);
-        TextView tvFollowing = (TextView) findViewById(R.id.tvFollowing);
+        TextView tvName = binding.tvName;
+        TextView tvTagline = binding.tvTagline;
+        TextView tvFollowers = binding.tvFollowers;
+        TextView tvFollowing = binding.tvFollowing;
 
-        ImageView ivProfileImage = (ImageView) findViewById(R.id.ivHeaderProfileImage);
+        ImageView ivProfileImage = binding.ivHeaderProfileImage;
         tvName.setText(user.name);
 
         tvTagline.setText(user.tagLine);
