@@ -3,6 +3,9 @@ package com.codepath.apps.restclienttemplate.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.codepath.apps.restclienttemplate.helper.TwitterApp;
 import com.codepath.apps.restclienttemplate.helper.TwitterClient;
@@ -25,7 +28,13 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
         client = TwitterApp.getRestClient();
 
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         populateTimeline();
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     private void populateTimeline() {
