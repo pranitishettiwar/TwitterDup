@@ -7,4 +7,11 @@
         android:onClick="onProfileView"
         android:title="Item"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/miCompose"
+        android:icon="@drawable/ic_add"
+        android:onClick="onCompose"
+        android:title="Item"
+        app:showAsAction="ifRoom"/>
 </menu>

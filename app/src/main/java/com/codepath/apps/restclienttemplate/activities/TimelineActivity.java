@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.adapter.TweetsPagerAdapter;
+import com.codepath.apps.restclienttemplate.fragments.ComposeFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
@@ -50,6 +52,15 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
         startActivity(i);
     }
 
+
+    public void onCompose(MenuItem item) {
+        FragmentManager fm = getSupportFragmentManager();
+        ComposeFragment composeDialogFragment = new ComposeFragment();
+        composeDialogFragment.show(fm, "fragment_compose");
+
+    }
+
+
     //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     //        fab.setOnClickListener(new View.OnClickListener() {
     //            @Override
@@ -61,12 +72,12 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
     //            }
     //        });
 
-    //        @Override
-    //        public void onFinishTweetCompose (Tweet tweet){
-    //            tweets.add(0, tweet);
-    //            tweetAdapter.notifyItemInserted(0);
-    //            rvTweets.scrollToPosition(0);
-    //        }
+//            @Override
+//            public void onFinishTweetCompose (Tweet tweet){
+//                tweets.add(0, tweet);
+//                tweetAdapter.notifyItemInserted(0);
+//                rvTweets.scrollToPosition(0);
+//            }
 
     //    void populatePostDelayTimeline(final int count, final long maxId, long delayMillis) {
     //        final Handler handler = new Handler();
@@ -113,13 +124,13 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
     //            }
     //        });
     //    }
-        @Override
-        public void onTweetSelected(Tweet tweet) {
-            //Toast.makeText(this, tweet.user.screenName, Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(TimelineActivity.this, ProfileActivity.class);
-            //i.putExtra("screenName", tweet.user.screenName);
-            i.putExtra("user", Parcels.wrap(tweet.user));
-            startActivity(i);
-        }
+    @Override
+    public void onTweetSelected(Tweet tweet) {
+        //Toast.makeText(this, tweet.user.screenName, Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(TimelineActivity.this, ProfileActivity.class);
+        //i.putExtra("screenName", tweet.user.screenName);
+        i.putExtra("user", Parcels.wrap(tweet.user));
+        startActivity(i);
+    }
 
 }

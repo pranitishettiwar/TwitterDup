@@ -34,7 +34,6 @@ import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
-import static com.loopj.android.http.AsyncHttpClient.log;
 
 /**
  * Created by praniti on 10/1/17.
@@ -46,26 +45,26 @@ public class ComposeFragment extends DialogFragment {
     private TextView tvCounter, tvProfileName;
     private ImageView ivProfileImage;
     private Button btnTweet;
-    private User user;
+    private User mUser;
     private TwitterClient client;
 
     public ComposeFragment() {
 
     }
 
-    public static ComposeFragment newInstance(User user) {
-        ComposeFragment frag = new ComposeFragment();
-        Bundle args = new Bundle();
-        //args.putString("jsonData", user.userData.toString());
-        frag.setArguments(args);
-        return frag;
-    }
+    //    public static ComposeFragment newInstance(User user) {
+    //        ComposeFragment frag = new ComposeFragment();
+    //        Bundle args = new Bundle();
+    //
+    //        //args.putString("jsonData", user.userData.toString());
+    //        frag.setArguments(args);
+    //        return frag;
+    //    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_compose, container);
     }
-
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -79,18 +78,37 @@ public class ComposeFragment extends DialogFragment {
         ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage1);
         btnTweet = (Button) view.findViewById(R.id.buttonTweet);
 
-        try {
-            JSONObject currentUserJSON = new JSONObject(getArguments().getString("jsonData"));
-            user = User.fromJSON(currentUserJSON);
-        } catch (JSONException e) {
-            log.d("JSON parsing exception when creating user", e.toString());
+        mUser = new User().currentUser;
+
+        if (mUser != null) {
+            composeTweet();
+        }
+        else{
+            client = TwitterApp.getRestClient();
+
+            client.getUserInfo(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                    try {
+                        mUser = User.fromJSON(response);
+                        User.currentUser = mUser;
+
+                        composeTweet();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            });
         }
 
-//        String str = new String(user.profileImageUrl);
-//        str = str.replace("_normal", "");
+    }
 
-        tvProfileName.setText(user.screenName);
-        Glide.with(getContext()).load(user.getProfileImageUrl()).apply(bitmapTransform(new RoundedCornersTransformation(10, 0,
+    private void composeTweet() {
+        tvProfileName.setText(mUser.screenName);
+        Glide.with(getContext()).load(mUser.getProfileImageUrl()).apply(bitmapTransform(new RoundedCornersTransformation(10, 0,
             RoundedCornersTransformation.CornerType.ALL))).into(ivProfileImage);
 
         etCompose.setOnKeyListener(new View.OnKeyListener() {
@@ -113,7 +131,7 @@ public class ComposeFragment extends DialogFragment {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         Tweet tweet = new Tweet();
-                        tweet.user = user;
+                        tweet.user = mUser;
                         tweet.body = composeTweet;
                         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
                         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
@@ -134,7 +152,6 @@ public class ComposeFragment extends DialogFragment {
 
         });
     }
-
 
     public interface OnSuccessTweetUpdate {
         void onFinishTweetCompose(Tweet tweet);

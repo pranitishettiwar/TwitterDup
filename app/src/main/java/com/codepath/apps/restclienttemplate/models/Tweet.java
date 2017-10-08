@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import static com.codepath.apps.restclienttemplate.helper.ParseRelativeDate.getRelativeTimeAgo;
 
@@ -9,6 +10,7 @@ import static com.codepath.apps.restclienttemplate.helper.ParseRelativeDate.getR
  * Created by praniti on 9/27/17.
  */
 
+@Parcel
 public class Tweet {
 
     public String body;
@@ -17,8 +19,11 @@ public class Tweet {
     public String createdAt;
     public String timeAgo;
 
-    // deserialize the JSON
+    public Tweet(){
 
+    }
+
+    // deserialize the JSON
     public static Tweet fromJSON(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
 

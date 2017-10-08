@@ -20,6 +20,7 @@ public class User {
     public int followersCount;
     public int followingCount;
 
+    public static User currentUser;
 
     public User(){
 
