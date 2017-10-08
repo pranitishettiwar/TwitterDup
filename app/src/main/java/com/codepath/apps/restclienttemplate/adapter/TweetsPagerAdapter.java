@@ -3,7 +3,6 @@ package com.codepath.apps.restclienttemplate.adapter;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 
 import com.codepath.apps.restclienttemplate.fragments.HomeTimelineFragment;
 import com.codepath.apps.restclienttemplate.fragments.MentionsTimelineFragment;
@@ -12,8 +11,9 @@ import com.codepath.apps.restclienttemplate.fragments.MentionsTimelineFragment;
  * Created by praniti on 10/5/17.
  */
 
-public class TweetsPagerAdapter extends FragmentPagerAdapter {
+public class TweetsPagerAdapter extends SmartFragmentStatePagerAdapter {
 
+    private static int NUM_ITEMS = 2;
     private String tabTitles[] = new String[]{ "Home", "Mentions" };
     private Context context;
 
@@ -26,7 +26,7 @@ public class TweetsPagerAdapter extends FragmentPagerAdapter {
     //return total # of fragment
     @Override
     public int getCount() {
-        return 2;
+        return NUM_ITEMS;
     }
 
     //return the fragment to use depending the position

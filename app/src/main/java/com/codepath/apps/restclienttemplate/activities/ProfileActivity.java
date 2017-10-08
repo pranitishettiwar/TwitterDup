@@ -34,7 +34,7 @@ public class ProfileActivity extends AppCompatActivity implements TweetsListFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        
+
         mUser = Parcels.unwrap(getIntent().getParcelableExtra("user"));
         //String screenName = getIntent().getStringExtra("screenName");
 
