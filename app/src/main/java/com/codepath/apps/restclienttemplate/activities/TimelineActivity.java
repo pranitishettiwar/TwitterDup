@@ -90,15 +90,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
 
     }
 
-    //    void populatePostDelayTimeline(final int count, final long maxId, long delayMillis) {
-    //        final Handler handler = new Handler();
-    //        handler.postDelayed(new Runnable() {
-    //            @Override
-    //            public void run() {
-    //                populateTimeline(count, maxId);
-    //            }
-    //        }, delayMillis);
-    //    }
+
 
     @Override
     public void onTweetSelected(Tweet tweet) {

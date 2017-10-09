@@ -26,19 +26,20 @@ public class HomeTimelineFragment extends TweetsListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        client = TwitterApp.getRestClient();
 
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        populateTimeline();
+        //populateTimeline();
+        client = TwitterApp.getRestClient();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    private void populateTimeline() {
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+
+    protected void populateTimeline(int count, long maxId) {
+        client.getHomeTimeline(count, maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("TwitterClient", response.toString());
