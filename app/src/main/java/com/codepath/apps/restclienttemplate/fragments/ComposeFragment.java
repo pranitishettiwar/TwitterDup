@@ -5,7 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -122,6 +125,7 @@ public class ComposeFragment extends DialogFragment {
             public void onClick(View v) {
                 final String composeTweet = etCompose.getText().toString();
                 Log.d("debug", "Post status: " + composeTweet);
+                if (isNetworkAvailable()) {
                 client.postTweet(new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -143,6 +147,9 @@ public class ComposeFragment extends DialogFragment {
                         Log.d("debug", "Tweet post failed " + errorResponse.toString());
                     }
                 }, composeTweet);
+                } else {
+                    Toast.makeText(getContext(), "Please connect to internet", Toast.LENGTH_SHORT).show();
+                }
             }
 
         });
@@ -150,6 +157,13 @@ public class ComposeFragment extends DialogFragment {
 
     public interface OnSuccessTweetUpdate {
         void onFinishTweetCompose(Tweet tweet);
+    }
+
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context
+            .CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
 }

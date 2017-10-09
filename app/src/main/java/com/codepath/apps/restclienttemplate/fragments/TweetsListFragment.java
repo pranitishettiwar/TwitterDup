@@ -84,8 +84,12 @@ public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAd
 
         rvTweets.addOnScrollListener(scrollListener);
 
-        max_id = -1;
-        populatePostDelayTimeline(PAGE_SIZE, max_id, 500);
+        if (isNetworkAvailable()) {
+            max_id = -1;
+            populatePostDelayTimeline(PAGE_SIZE, max_id, 500);
+        } else {
+            Toast.makeText(getContext(), "Please connect to internet", Toast.LENGTH_SHORT).show();
+        }
 
         return binding.getRoot();
     }
