@@ -62,6 +62,7 @@
                 android:autoLink="all"
                 android:lineSpacingExtra="1dp"
                 android:lines="4"
+                android:textColorLink="#c62c09"
                 android:linksClickable="true"
                 android:text="TextView"
                 android:textSize="13sp"/>
