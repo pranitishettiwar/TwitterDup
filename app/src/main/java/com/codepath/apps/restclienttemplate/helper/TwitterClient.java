@@ -47,7 +47,6 @@ public class TwitterClient extends OAuthBaseClient {
         // Can specify query string params directly or through RequestParams.
         RequestParams params = new RequestParams();
         params.put("count", count);
-        //params.put("since_id", 1);
 
         if (max_id >= 0) {
             params.put("max_id", max_id);
@@ -55,27 +54,28 @@ public class TwitterClient extends OAuthBaseClient {
         client.get(apiUrl, params, handler);
     }
 
-    public void getMentionsTimeline(AsyncHttpResponseHandler handler) {
+    public void getMentionsTimeline(int count, long max_id, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/mentions_timeline.json");
         // Can specify query string params directly or through RequestParams.
         RequestParams params = new RequestParams();
-        //params.put("count", count);
-        params.put("count", 25);
-        params.put("since_id", 1);
+        params.put("count", count);
 
-        //        if (max_id >= 0) {
-        //            params.put("max_id", max_id);
-        //        }
+        if (max_id >= 0) {
+            params.put("max_id", max_id);
+        }
         client.get(apiUrl, params, handler);
     }
 
-    public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler) {
+    public void getUserTimeline(int count, long max_id, String screenName, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/user_timeline.json");
         // Can specify query string params directly or through RequestParams.
         RequestParams params = new RequestParams();
         params.put("screen_name", screenName);
-        //params.put("count", count);
-        params.put("count", 25);
+        params.put("count", count);
+
+        if (max_id >= 0) {
+            params.put("max_id", max_id);
+        }
         client.get(apiUrl, params, handler);
     }
 
